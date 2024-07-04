@@ -1,6 +1,5 @@
 ---
 title: "Análise de Regressão"
-author: "Leonardo Packer de Quaros"
 format: html
 editor: visual
 execute: 
@@ -33,7 +32,7 @@ A regressão linear é um modelo estatístico fundamental que busca descrever a 
 ```{r}
 ## carregando o data frame
 estande <- gsheet2tbl("https://docs.google.com/spreadsheets/d/1bq2N19DcZdtax2fQW9OHSGMR0X2__Z9T/edit#gid=401662555")
-estande
+datatable(estande)
 ```
 
 O data frame mostra três experimentos/repetições, onde a variável estande é dependente dos tratamentos.
@@ -230,6 +229,10 @@ A regressão não-linear permite uma relação mais complexa e curva entre as va
 ```{r}
 fung <- gsheet2tbl("https://docs.google.com/spreadsheets/d/1bq2N19DcZdtax2fQW9OHSGMR0X2__Z9T/edit#gid=465348652")
 
+datatable(fung)
+```
+
+```{r}
 fung2 <- fung %>% 
   group_by(code, dose) %>% 
   summarise(mean_germ = mean(germination))
@@ -241,7 +244,7 @@ fung2 %>%
   facet_wrap(~ code)
 ```
 
-#### Modelagem de EC~50~
+## Modelagem de EC~50~
 
 Utilizaremos o pacote **`drc`**, com a função `drm`. Aqui será importante definir a função (LL2, LL3, LL4) para comparar os modelos e selecionar aquele mais simples (com menor AIC).
 

@@ -8,37 +8,33 @@ execute:
   warning: false
 ---
 
-# Dados
-
 A partir desta seção o objetivo será fornecer uma visão geral rápida das principais ferramentas para a importação, organização, transformação e visualização de dados. Iniciaremos abordando a importação e organização de dados.
-
 
 ## Estrutura de Dados
 
 A estrutura dos dados pode ser classificada em várias formas:
 
-1. Escalares e Vetoriais: São os tipos mais simples de estrutura de dados. Os vetores podem conter um único valor, sendo chamados de escalares, ou múltiplos valores. Podem ser compostos por números, caracteres, fatores ou valores lógicos. Todos os elementos dentro de um vetor devem ser da mesma classe e podem incluir valores NA.
+1.  Escalares e Vetoriais: São os tipos mais simples de estrutura de dados. Os vetores podem conter um único valor, sendo chamados de escalares, ou múltiplos valores. Podem ser compostos por números, caracteres, fatores ou valores lógicos. Todos os elementos dentro de um vetor devem ser da mesma classe e podem incluir valores NA.
 
-2. Matrizes e Arrays: Matrizes são vetores com atributos adicionais chamados dimensões. Arrays são matrizes multidimensionais, permitindo mais de duas dimensões.
+2.  Matrizes e Arrays: Matrizes são vetores com atributos adicionais chamados dimensões. Arrays são matrizes multidimensionais, permitindo mais de duas dimensões.
 
-3. Listas: Estruturas de dados que podem armazenar elementos de diferentes classes, incluindo outros vetores, matrizes, arrays e até outras listas. Um data.frame é um tipo especial de lista.
+3.  Listas: Estruturas de dados que podem armazenar elementos de diferentes classes, incluindo outros vetores, matrizes, arrays e até outras listas. Um data.frame é um tipo especial de lista.
 
-4. Quadros de Dados (Data Frames): A forma de estrutura de dados mais utilizada. Podem conter diferentes classes de dados, onde cada linha representa uma observação individual e cada coluna corresponde a uma variável. É importante que todas as colunas tenham o mesmo número de observações para manter a regularidade dos dados.
-
+4.  Quadros de Dados (Data Frames): A forma de estrutura de dados mais utilizada. Podem conter diferentes classes de dados, onde cada linha representa uma observação individual e cada coluna corresponde a uma variável. É importante que todas as colunas tenham o mesmo número de observações para manter a regularidade dos dados.
 
 ## Data Frame
 
 Um data.frame é uma estrutura de dados que organiza-os em uma tabela bidimensional de linhas e colunas.
 
-
 ## Importação do Data Frame
 
 O data frame pode ser importado de algum pacote, em fomato Excel, csv e txt, em Google Sheets, ou copiados, colados ou digitados direto na interface R.
 
-
-### Data Frame disponível em um pacote
+#### Data Frame disponível em um pacote
 
 ```{r}
+library(DT)
+
 ## Carregamento do pacote ao qual estão dispostos o data.frame 
 library(ec50estimator)
 
@@ -46,14 +42,12 @@ library(ec50estimator)
 data.frame1 <- multi_isolate
 
 ## apresentando o meu data.frame 
-multi_isolate
+datatable(multi_isolate)
 ```
 
-
-### Data Frame disponível em formato Excel dentro da pasta do projeto
+#### Data Frame disponível em formato Excel dentro da pasta do projeto
 
 ```{r}
-install.packages("readxl")
 library(readxl)
 
 ## chamando o documento que será o meu data.frame
@@ -64,36 +58,33 @@ data.frame_2 <- read_excel("dados-diversos.xlsx", sheet="escala")
 data.frame_2 <- read_excel("dados-diversos.xlsx", "escala")
 data.frame_2 <-read_excel("dados-diversos.xlsx",2)
 
-data.frame_2
+datatable(data.frame_2)
 ```
 
-### Data Frame disponível em formato csv dentro da pasta do projeto
+#### Data Frame disponível em formato csv dentro da pasta do projeto
 
 ```{r}
-install.packages("tidyverse")
 library(tidyverse)
 
 ## chamando o documento que será o meu data.frame
 data.frame_3 <- read_csv("dados-diversos_1.csv")
 
-data.frame_3
+datatable(data.frame_3)
 ```
 
-### Data Frame disponível em Google Sheets
+#### Data Frame disponível em Google Sheets
 
 ```{r}
-install.packages("gsheet")
 library(gsheet)
 
-data.frame_4 <- gsheet2tbl("https://docs.google.com/spreadsheets/d/1aID5Dh6PlBVCKzU1j7k-WA6zuWQWE2NhtWEgdJtt5iA/edit?usp=sharing")
+data.frame_4 <- gsheet2tbl("https://docs.google.com/spreadsheets/d/1pAIFKsdKxk_UQQXdYwIO-O5NOkYNhpclImJcLziYnk4/edit#gid=50258992")
 
-data.frame
+datatable(data.frame_4)
 ```
 
-### Data Frame inserido manualmente e colado no Chunk
+#### Data Frame inserido manualmente e colado no Chunk
 
 ```{r}
-install.packages("datapasta") ## Pacote útil para inserir os dados de forma manual
 library(datapasta)
 
 ## função tribble facilita a criação de tibbles (uma modernização dos data frames)
@@ -121,10 +112,10 @@ data.frame_5 <- tibble::tribble(
         "control",  10L,    16
         )
 
-data.frame_5
+datatable(data.frame_5)
 ```
 
-### Data Frame com inserção manual dos dados de cada variável/coluna como um fator
+#### Data Frame com inserção manual dos dados de cada variável/coluna como um fator
 
 ```{r}
 data.frame_6 <- c("comp", "9", "12.5", "10", "8", "13.2", "11", "10.8", "9.5", "10.8", "10.4", "13.72", "15.91", "15.7", "14.2", "15.9", "16.54", "18", "14.4", "16.41", "16")
@@ -146,10 +137,10 @@ data.frame_7 <- data.frame(
                        18,14.4,16.41,16)
 )
 
-data.frame_7
+datatable(data.frame_7)
 ```
 
-### Data Frame copiado da Internet
+#### Data Frame copiado da Internet
 
 ```{r}
 data.frame_8 <- tibble::tribble(
@@ -186,8 +177,7 @@ data.frame_8 <- tibble::tribble(
         30L,             "Egito",  "1.001.500 km²",   "111,0 mi",              "110,8"
         )
 
-data.frame_8
-
+datatable(data.frame_8)
 ```
 
 ## Tipos de Dados
@@ -202,7 +192,7 @@ Lógico; Complexo;
 
 Caraceter - pode ser um fator por exemplo.
 
-### Descobrir a classse dos dados de alguma variável por teste lógico
+#### Descobrir a classse dos dados de alguma variável por teste lógico
 
 ```{r}
 class(data.frame_8$Habitantes)
@@ -212,7 +202,7 @@ class(data.frame_8$Habitantes)
 is.character(data.frame_8$Habitantes)
 ```
 
-### Alteração da classe dos dados de uma variável
+#### Alteração da classe dos dados de uma variável
 
 ```{r}
 data.frame_8$Habitantes <- as.numeric(data.frame_8$Habitantes)
@@ -232,13 +222,13 @@ glimpse(data.frame_9)
 view(data.frame_9)
 ```
 
-### Sumarização dos parâmetros de estatística descritiva de uma variável resposta
+#### Sumarização dos parâmetros de estatística descritiva de uma variável resposta
 
 ```{r}
 summary(data.frame_9$inc)
 ```
 
-### Filtrando os dados da variável resposta por um fator
+#### Filtrando os dados da variável resposta por um fator
 
 ```{r}
 ## Filtrando os dados da variável respota inc pelo fator region
@@ -248,7 +238,7 @@ data.frame_9|>
             sd_mean = sd(inc),
             sd_mean = sd(inc))
 
-data.frame_9
+datatable(data.frame_9)
 ```
 
 ```{r}
@@ -257,17 +247,17 @@ data.frame_9|>
   group_by(cultivar)|>
   summarise(sev_med = median(sev2), sev_mean = mean(sev2), sev_sd = sd(sev2))
 
-data.frame_9
+datatable(data.frame_9)
 ```
 
-### Criando um subconjunto
+#### Criando um subconjunto
 
 ```{r}
 ## Selecionando os fatores farm, region e cultivar, e a variável resposta sev2
 data.frame_9_2<-data.frame_9|>
   select(farm, region, cultivar, sev2)
 
-data.frame_9_2
+datatable(data.frame_9_2)
 ```
 
 ```{r}
@@ -276,7 +266,56 @@ data.frame_9_oromia<-data.frame_9|>
   select(farm, region, cultivar, sev2)|>
   filter(region=="Oromia")
 
-data.frame_9_oromia
+datatable(data.frame_9_oromia)
 ```
 
-Na próxima seção abordaremos a visualização de dados, extremamente importante para análise exploratória e para apresentação dos dados . . .
+
+## Passando os dados de formato largo para formato longo
+
+Ação necessária para realização de algumas anáalises de estatística inferencial 
+
+```{r}
+mg <- gsheet2tbl("https://docs.google.com/spreadsheets/d/1bq2N19DcZdtax2fQW9OHSGMR0X2__Z9T/edit#gid=983033137")
+
+mg2 <- mg |>
+  pivot_wider(names_from = trat, 
+              values_from = comp)
+
+datatable(mg2)
+```
+
+
+## Chequando a heterocedacidade e normalidade dos dados 
+
+A normalidade dos resíduos e a homogeneidade de variâncias são pressupostos fundamentais em muitas análises estatísticas, como a análise de variância (ANOVA), testes t, e regressões lineares. Verificar esses pressupostos é crucial porque a violação deles pode levar a resultados inválidos ou enganosos. A normalidade refere-se à suposição de que os dados (ou os resíduos de um modelo) seguem uma distribuição normal (distribuição gaussiana). Muitas técnicas estatísticas, como o teste t e a ANOVA, assumem que os dados são normalmente distribuídos para que os resultados sejam válidos. A homogeneidade de variâncias (ou homocedasticidade) refere-se à suposição de que os diferentes grupos que estão sendo comparados têm variâncias iguais. Este é um pressuposto importante para testes como a ANOVA e a regressão linear. Só através dos testes em diante poderemos confiar nas análises paramétricas, como teste t e ANOVA. 
+
+
+#### Testando a normalidade dos resíduos 
+
+Impostante para realizar o teste t
+
+```{r}
+## carregando o pacote
+mg <- gsheet2tbl("https://docs.google.com/spreadsheets/d/1bq2N19DcZdtax2fQW9OHSGMR0X2__Z9T/edit#gid=983033137")
+
+## Teste de Shapiro-Wilk
+shapiro.test(mg2$control)
+
+## Histograma para ver se a distribuição dos dados seguem a distribuição normal
+hist(mg2$control)
+
+## Gráfico Q-Q dos resíduos para verificar normalidade
+qqnorm(mg2$control)
+qqline(mg2$control)
+
+```
+
+Aceito a hipótese nula de que o resíduo dos meus dados são normais 
+
+
+Pórem em não há normalidade dos resíduos ou homogeneidade das variâncias, devo seguir um teste não paramétrico, ou optar pela tranformação destes dados 
+
+## Tranformação de Dados 
+
+Pode ser feita log, box cox e entre outro (veremos em análise exploratória)
+

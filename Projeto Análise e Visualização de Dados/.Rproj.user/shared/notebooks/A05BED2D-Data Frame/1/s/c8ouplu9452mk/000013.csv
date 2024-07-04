@@ -1,6 +1,0 @@
-"0","mg2 <- mg |>
-  pivot_wider(names_from = trat, 
-              values_from = comp)
-"
-"2","Erro: objeto 'mg' não encontrado
-"

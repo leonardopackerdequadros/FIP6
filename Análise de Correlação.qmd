@@ -1,6 +1,5 @@
 ---
 title: "Análise de Correlação"
-author: "Leonardo Packer de Quadros"
 format: html
 editor: visual
 execute: 
@@ -140,9 +139,9 @@ cor.test(campo2$PROD, campo2$FER)
 
 Avalia-se os intervalos de confiança obtidos (IC da correlação entre PROD e DFC *vs.* IC da correlação entre PROD e FER) e caso não haja sobreposição de intervalos, as correlações diferem estatisticamente.
 
-## Exemplo 3 
+## Exemplo 3
 
-#### Importação dos dados 
+#### Importação dos dados
 
 ```{r}
 dados <- gsheet2tbl("https://docs.google.com/spreadsheets/d/1t1oOnimLXdx6rqtDiYg6wNXB2byY8_Z-/edit?gid=1891383351#gid=1891383351")
@@ -150,15 +149,13 @@ dados <- gsheet2tbl("https://docs.google.com/spreadsheets/d/1t1oOnimLXdx6rqtDiYg
 datatable(dados)
 ```
 
-
-#### Matriz de correlação 
+#### Matriz de correlação
 
 ```{r}
 cor1 <- dados[,4:13]
 corelacao1 <- cor(cor1)
 datatable(corelacao1)
 ```
-
 
 #### Plot do Gráfico de Corrrelação
 

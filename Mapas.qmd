@@ -1,6 +1,5 @@
 ---
 title: "Mapas"
-author: "Leonardo Packer de Quadros"
 format: html
 editor: visual
 execute: 
@@ -10,7 +9,7 @@ execute:
 
 A apresentação de mapas, dependendo do estudo em fitopatologia, é um elemento gráfico essencial que compõe a localização geográfica de ensaios, objetos de estudo e isolados de um determinado patógeno. Além disso, permite determinar características ambientais favoráveis à incidência de uma doença e visualizar padrões espaciais e/ou temporais das mesmas. O Softwware R é uma ótima opção para realizar mapas interativos ou que carreguem alto nível de informação. Apresenderemos aqui como realizar mapas se utilizando dos pacotes `rnaturalearth`,`rnaturalearthhires`, `ggspatial`, `scatterpie` e `ggrepel`.
 
-## Carregamento dos pacotes
+#### Carregamento dos pacotes
 
 ```{r}
 library(tidyverse)
@@ -29,7 +28,7 @@ library(DT)
 
 ## Mapas Estáticos
 
-### Mapa de um País
+## Mapa de um País
 
 Utilização dos Pacotes `rnaturalearth`, `rnaturalearthhires` e `ggspatial`
 
@@ -49,7 +48,7 @@ ggplot(BRA) +
   labs(x = "", y = "", title = "Mapa do Brasil", caption = "Fonte: Leonardo Packer de Quadros")
 ```
 
-### Mapa destacando um Estado
+## Mapa destacando um Estado
 
 ```{r}
 ## criação do objeto
@@ -67,7 +66,7 @@ ggplot(BRA) +
   labs(x = "", y = "", title = "Mapa do Brasil com destaque ao Estado de Minas Gerais", caption = "Fonte: Leonardo Packer de Quadros")
 ```
 
-### Mapa de um Estado
+## Mapa de um Estado
 
 ```{r}
 ## criação do objeto 
@@ -81,7 +80,7 @@ ggplot(MG) +
   labs(x = "", y = "", title = "Mapa do Estado de Minas Gerais", caption = "Fonte: Leonardo Packer de Quadros")
 ```
 
-### Mapa com pontos nas coordenadas de Incidência de Ferrugem da Soja no Brasil
+## Mapa com pontos nas coordenadas de Incidência de Ferrugem da Soja no Brasil
 
 ```{r}
 ## Utilização dos data frame do pacote r4pde
@@ -96,7 +95,7 @@ ggplot(BRA) +
   geom_point(data = sbr, aes(longitude, latitude), color = "#e05e00")
 ```
 
-### Mapa com gráficos de pizza de incidência de doenças da soja nas localidades
+## Mapa com gráficos de pizza de incidência de doenças da soja nas localidades
 
 Utilização dos pacotes `ggrepel` e `scatterpie`
 
@@ -130,7 +129,7 @@ ggplot(BRA) +
 
 Utilização do pacote `leaflet`, com utilização as coordenadas
 
-### Mapa do município de Viçosa - MG
+## Mapa do município de Viçosa - MG
 
 ```{r}
 leaflet() |> 
@@ -138,7 +137,7 @@ leaflet() |>
   setView(lng = -42.8825 , lat = -20.7546, zoom = 15)
 ```
 
-### Mapa regional com o município de Viçosa - MG ao centro
+## Mapa regional com o município de Viçosa - MG ao centro
 
 ```{r}
 leaflet() |> 
@@ -146,7 +145,7 @@ leaflet() |>
   setView(lng = -42.8825 , lat = -20.7546, zoom = 5)
 ```
 
-### Mapa com pontos nas coordenadas de Incidência de Ferrugem da Soja no Brasil
+## Mapa com pontos nas coordenadas de Incidência de Ferrugem da Soja no Brasil
 
 ```{r}
 leaflet(sbr) |> 

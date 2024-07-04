@@ -1,4 +1,0 @@
-"0","mf<-lm(severity ~treat*dose, data = li)
-"
-"2","Error in eval(mf, parent.frame()) : objeto 'li' não encontrado
-"

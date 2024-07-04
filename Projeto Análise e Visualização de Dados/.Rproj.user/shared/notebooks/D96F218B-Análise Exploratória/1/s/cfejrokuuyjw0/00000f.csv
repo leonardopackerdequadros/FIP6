@@ -1,6 +1,0 @@
-"0","library(r4pde)
-"
-"2","Mensagen de aviso:
-"
-"2","substituindo importação prévia ‘car::recode’ por ‘dplyr::recode’ quando carregando ‘r4pde’ 
-"
