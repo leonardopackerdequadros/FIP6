@@ -1,0 +1,395 @@
+---
+title: "Aula_6"
+format: html
+editor: Leonardo 
+---
+
+## Estatística enferencial
+
+```{r}
+library(gsheet)
+mg <- gsheet2tbl("https://docs.google.com/spreadsheets/d/1bq2N19DcZdtax2fQW9OHSGMR0X2__Z9T/edit#gid=983033137")
+mg
+
+#configurar meu tema para todos os gráficos 
+theme_set(theme_bw())
+```
+
+```{r}
+
+# exploração de dados 
+library (tidyverse)
+mg|> 
+  ggplot(aes(trat, comp))+ 
+  geom_boxplot()
+```
+
+```{r}
+## vamos fazer o teste T 
+## passar do formato ongo para largo 
+mg2 <- mg |>
+  pivot_wider(names_from = trat, 
+              values_from = comp)
+mg2
+
+?t.test
+
+t.test (mg2$Mg2, mg2$control)
+
+# há diferença estatística
+```
+
+## Podemos a=confiar neste teste t
+
+```{r}
+# testando nornalidade 
+shapiro.test(mg2$control)
+
+hist(mg2$control)
+
+qqnorm(mg2$control)
+qqline(mg2$control)
+
+qqnorm(mg2$Mg2)
+qqline(mg2$Mg2)
+
+shapiro.test(mg2$Mg2)
+?shapiro.test
+hist(mg2$Mg2)
+
+#teste de homogeneidade dasd variãncias 
+var.test(mg2$control, mg2$Mg2)
+
+#varia^naica não são hogênicas 
+t.test (mg2$Mg2, mg2$control, var.equal = FALSE)
+#variâncias são homogêneas 
+t.test (mg2$Mg2, mg2$control, var.equal = TRUE)
+#OU
+t.test (mg2$Mg2, mg2$control)
+```
+
+```{r}
+#fazer um relatório [
+
+teste_t_1 <- t.test (mg2$Mg2, mg2$control)
+
+install.packages("report")
+library(report)
+report(teste_t_1)
+
+```
+
+## teste quando há dois grupos dependetes
+
+```{r}
+
+escala<- gsheet2tbl("https://docs.google.com/spreadsheets/d/1bq2N19DcZdtax2fQW9OHSGMR0X2__Z9T/edit#gid=1729131173")
+escala 
+
+# exploração de dados 
+library (tidyverse)
+escala|> 
+  ggplot(aes(assessment, acuracia))+ 
+  geom_boxplot()
+
+#melhor acurácia com auxílio 
+
+escala2 <- escala |>
+  select( assessment, rater, acuracia) |> 
+  pivot_wider(names_from = assessment, 
+              values_from = acuracia)
+escala2
+
+
+#devo fazer o teste t pareado agora 
+
+
+
+shapiro.test(escala2$Unaided)
+shapiro.test(escala2$Aided1)
+
+
+var.test(escala2$Unaided, escala2$Aided1)
+
+# podemos proceder com teste paramétrico mas as variâncias são heterogêneas 
+
+t.test (escala2$Unaided, escala2$Aided1, paired = TRUE, 
+        var.equal = FALSE)
+
+# regeito a hipótese nula 
+
+```
+
+## teste não paramétrico
+
+```{r}
+escala<- gsheet2tbl("https://docs.google.com/spreadsheets/d/1bq2N19DcZdtax2fQW9OHSGMR0X2__Z9T/edit#gid=1729131173")
+escala 
+
+escala2 <- escala |>
+  select( assessment, rater, acuracia) |> 
+  pivot_wider(names_from = assessment, 
+              values_from = acuracia)
+
+escala2
+
+shapiro.test(escala2$Unaided)
+
+shapiro.test(escala2$Aided1)
+
+#rejeito a hipótese nula 
+wilcox.test(escala2$Aided1, escala2$Unaided, paired = TRUE)
+
+
+```
+
+```{r}
+library(ggplot2)
+library(r4pde)
+library(gsheet)
+library(tidyverse)
+
+esp<- gsheet2tbl("https://docs.google.com/spreadsheets/d/1bq2N19DcZdtax2fQW9OHSGMR0X2__Z9T/edit#gid=959387827")
+
+theme_set(r4pde::theme_r4pde(font_size = 10))
+
+esp |> 
+  ggplot(aes (especie, tcm))+
+  geom_jitter (width = 0.05)
+```
+
+```{r}
+## criando o objeto 
+m1<- lm (tcm ~especie, data =esp)
+m1<- lm (tcm ~especie-1, data =esp)
+
+anova (m1) ## Houve diferença estatística
+summary (m1)
+
+library (emmeans)
+medias1 <- emmeans (m1, ~especie)
+
+# observar os uverlaps 
+library(multcomp)
+library(multcompView)
+
+cld (medias1)## mostra as letras 
+
+## testar a normalidade e hogeneidade
+shapiro.test(m1$residuals)
+
+library(DHARMa)
+plot (simulateResiduals (m1))
+
+report(m1)
+
+library(performance)
+check_normality(m1)
+check_heteroscedasticity(m1)
+check_model(m1)
+```
+
+Houve normalidade e hogeneidade, podendo-se confiar na diferença estatística entre as médias
+
+```{r}
+
+```
+
+```{r}
+InsectSprays
+
+?InsectSprays
+
+inseticida<-InsectSprays
+inseticida
+
+library (tidyverse)
+
+inseticida|>
+  count(spray)
+```
+
+```{r}
+ inseticida |> 
+  ggplot(aes(x = spray, y = count)) +
+  geom_boxplot() +
+  labs(title = "", caption = "Fonte: Leonardo", x = "Spray", y = "count", family = "Arial", color = "black", size = 12)
+  
+```
+
+```{r}
+modelo1<-lm(count ~spray, data = inseticida)
+summary (modelo1)
+anova(modelo1)
+
+
+modelo1$residuals
+hist(modelo1$residuals)
+qqnorm(modelo1$residuals)
+qqline(modelo1$residuals)
+shapiro.test(modelo1$residuals)
+bartlett.test (count ~spray, data = inseticida)
+
+
+library (performance)
+check_normality(modelo1)
+check_heteroscedasticity(modelo1)
+
+library(DHARMa)
+plot(simulateResiduals(modelo1))
+
+
+```
+
+```{r}
+#alternativa 1 - transformação
+inseticida<-inseticida|> 
+  mutate (count2 = sqrt (count))
+
+inseticida
+
+ inseticida |> 
+  ggplot(aes(x = spray, y = count2)) +
+  geom_boxplot() +
+  labs(title = "", caption = "Fonte: Leonardo", x = "Spray", y = "count", family = "Arial", color = "black", size = 12)
+ 
+ 
+modelo2 <- lm (count2 ~spray, data = inseticida)
+summary (modelo2)
+anova(modelo2)
+
+
+modelo1$residuals
+hist(modelo2$residuals)
+qqnorm(modelo2$residuals)
+qqline(modelo2$residuals)
+shapiro.test(modelo2$residuals)
+bartlett.test (count2 ~ spray, data = inseticida)
+
+library (performance)
+check_normality(modelo2)
+check_heteroscedasticity(modelo2)
+
+library(DHARMa)
+plot(simulateResiduals(modelo2))
+
+```
+
+```{r}
+library(emmeans)
+modelo1_medias<-emmeans(modelo1, ~spray)
+plot(modelo1_medias)
+
+library(multcomp)
+cld(modelo1_medias)
+
+pwpm(modelo1_medias)
+pwpp (modelo1_medias)
+pairs(modelo1_medias)
+
+
+#dados tranformados 
+library(emmeans)
+modelo2_medias<-emmeans(modelo2, ~spray)
+plot(modelo2_medias)
+
+library(multcomp)
+cld(modelo2_medias)
+pwpm(modelo2_medias)
+
+
+pwpm
+```
+
+```{r}
+#alternativa 2 não paramétrico 
+## kuskal wallis 
+
+install.packages("agricolae")
+library (agricolae)
+
+kruskal.test(count ~ spray, data = inseticida)
+
+modelo3 <- kruskal(inseticida$count, inseticida$spray, group = TRUE)
+modelo3
+```
+
+```{r}
+##alternativa 3 - GLMs 
+modelo4 <- glm(count ~spray, family = gaussian, data= inseticida)
+modelo4
+
+modelo4 <- glm(count ~spray, family = poisson, data= inseticida)
+modelo4
+anova(modelo4)
+install.packages("car")
+library(car)
+Anova(modelo4)
+
+library(DHARMa)
+plot(simulateResiduals (modelo4))
+check_nomality(modelo4)
+
+modelo4_medias <- emmeans(modelo4, ~spray, type = "response")
+modelo4_medias 
+cld(modelo4_medias)
+```
+```{r}
+#alternativa 1 para transformaçao - fizemos antes a de raiz, vamos fazer agora a de box cox 
+
+install.packages("MASS")
+library(MASS)
+
+b<-boxcox(lm(inseticida$count+ 0.1 ~1))
+lambda <- b$x[which.max(b$y)]
+lambda
+
+inseticida$count3<-(inseticida$count ^ lambda -1) / lambda
+inseticida$count3
+
+```
+```{r}
+#analaise exploratória de um fa torial 
+
+li <- gsheet2tbl("https://docs.google.com/spreadsheets/d/1bq2N19DcZdtax2fQW9OHSGMR0X2__Z9T/edit#gid=2023059672")
+li
+
+#gráfico de dispersão entre 
+
+ li |>
+   ggplot(aes(factor(dose), severity, color = factor (dose))) +
+ geom_jitter(width = 0.1)+
+   facet_wrap(~treat)
+
+
+```
+#modelo faotrial (two-way anova) 
+```{r}
+mf<-lm(severity ~treat*dose, data = li)
+mf 
+anova (mf)
+```
+```{r}
+plot(simulateResiduals(mf))
+check_normality(mg)
+
+
+mf_medias<-emmeans(mf, ~treat | dose)
+
+mf_medias
+cld(mf_medias)
+
+mf_medias<-emmeans(mf, ~dose | treat)
+
+mf_medias
+cld(mf_medias)
+
+
+
+
+
+```
+```{r}
+
+```
+

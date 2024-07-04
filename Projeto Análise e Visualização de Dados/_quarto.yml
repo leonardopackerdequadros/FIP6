@@ -1,0 +1,51 @@
+project:
+  type: website
+  output-dir: docs
+
+execute: 
+  cache: true
+  freeze: auto
+  warning: false
+  
+website:
+  title: ""
+  navbar:
+    tools:
+      - icon: linkedin 
+        href: https://www.linkedin.com/in/leonardo-packer-de-quadros-b858562ba/
+      - icon: github
+        href: https://github.com/leonardopackerdequadros
+    left:
+      - text: Home
+        href: index.qmd
+      - text: Introdução
+        menu: 
+          - href: Uma Visão Geral Sobre Análise de Dados.qmd
+            text: Uma Visão Geral Sobre Análise de Dados 
+          - href: Iniciando uma Jornada R.qmd
+            text: Iniciando uma Jornada R
+      - text: Data Frame
+        href: Data Frame.qmd
+      - text: Estatística Descritiva
+        href: Estatística Descritiva.qmd
+      - text: Estatística Inferencial 
+        menu: 
+          - href: Testes de Hipótese para dois Grupos.qmd
+            text: Testes de Hipótese para dois Grupos
+          - href: Teste de Hipótese para Múltiplos Grupos.qmd
+            text: Teste de Hipótese para Múltiplos Grupos
+          - href: Análise de Regressão.qmd
+            text: Análise de Regressão
+          - href: Análise de Correlação.qmd
+            text: Análise de Correlação
+      - text: Mapas 
+        href: Mapas.qmd
+        
+format:
+  html:
+    theme: lux
+    css: styles.css
+    toc: true
+
+editor: visual
+

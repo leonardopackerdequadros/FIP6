@@ -1,0 +1,223 @@
+---
+title: "Aula_9"
+format: html
+editor: visual
+---
+
+## MIlho
+
+```{r}
+#Pacela subdividada 
+library(tidyverse)
+library(gsheet)
+Milho <- gsheet2tbl("https://docs.google.com/spreadsheets/d/1bq2N19DcZdtax2fQW9OHSGMR0X2__Z9T/edit#gid=1345524759")
+
+Milho
+
+```
+
+```{r}
+##visualizar 
+milho <- Milho |>
+  mutate (hybrid = as.factor(hybrid),
+          method = as.factor(method))
+milho
+
+#visualizar 
+index <- milho|>
+  ggplot(aes(method, index))+
+  geom_jitter(width = 0.1, alpha = 0.2)+
+  facet_wrap(~hybrid)+
+  stat_summary(fun.data = "mean_cl_boot", size = 0.5, color = "blue")
+  
+index 
+```
+
+## MODELO PARA SUBDIVIDIDA
+
+```{r}
+install.packages("car")
+library(car)
+install.packages("lme4")
+library(lme4)
+
+milho <- milho |> 
+  mutate(block = as.factor(block))
+
+mix2 <- lmer(index ~ hybrid*method + block + (1|block/hybrid), data = milho)
+
+Anova(mix2)
+```
+
+## Ver se o modelo está correto, testando as premissa
+
+```{r}
+library (performance)
+check_normality(mix2)
+check_heteroscedasticity(mix2)
+
+library(DHARMa)
+plot(simulateResiduals(mix2))
+
+#tranformar 
+mix2 <- lmer(sqrt(index) ~ hybrid*method + block + (1|block/hybrid), data = milho)
+
+Anova(mix2)
+
+library (performance)
+check_normality(mix2)
+check_heteroscedasticity(mix2)
+
+library(DHARMa)
+plot(simulateResiduals(mix2))
+
+qqnorm(residuals(mix2))
+qqline(residuals(mix2))
+hist(residuals(mix2))
+
+
+```
+
+##médias
+
+```{r}
+library(emmeans)
+medias_milho <- emmeans (mix2,
+                         ~ hybrid | method, 
+                         type = "response")
+medias_milho 
+
+medias_milho2 <- emmeans (mix2,
+                          ~method | hybrid, 
+                         type = "response")
+medias_milho2
+
+library(multcomp)
+cld(medias_milho2)## aparece os grupos 
+cld(medias_milho2)
+cld(medias_milho2, Letters = LETTERS)
+cld(medias_milho, Letters = LETTERS)
+```
+
+```{r}
+## fazer para yield 
+
+
+```
+
+## Regressão linear
+
+```{r}
+estande <- gsheet2tbl("https://docs.google.com/spreadsheets/d/1bq2N19DcZdtax2fQW9OHSGMR0X2__Z9T/edit#gid=401662555")
+estande
+
+#gráfico de dispersão 
+
+#visualizar 
+nplants <- estande|>
+  ggplot(aes(trat, nplants))+
+  geom_jitter(width = 0.1, alpha = 0.5)+
+  facet_wrap(~exp)+
+  stat_summary(fun.data = "mean_cl_boot", size = 0.5, color = "blue")+
+  geom_smooth (method = "lm", se = FALSE)
+  
+nplants
+
+#combinand0 ensaios no mesmo grafico....
+
+
+```
+
+```{r}
+exp1<- estande|>
+  filter(exp==1)
+exp1|>
+  ggplot(aes(trat, nplants))+
+  geom_point()+
+  ylim(0, 100)+
+  geom_smooth(se = FALSE)
+
+#modelo linear 
+lm1 <- lm(nplants ~trat, data = exp1)
+summary(lm1)
+
+
+## fazer para os outros ensaios  . . .
+
+```
+
+```{r}
+# modelo quadrpatico para experimento 2 
+exp2<- estande|>
+  filter(exp==2)
+exp2|>
+  ggplot(aes(trat, nplants))+
+  geom_point()+
+  ylim(0, 100)+
+  geom_smooth(se = FALSE)
+
+#ou transforma o tratamentos em log (pois é crecente log od stratamentos), ou podemos fazer GLM gaussiana pu poissomn 
+
+glm2 <- glm(nplants ~ trat, family = "gaussian", data = exp2)
+
+summary (glm2)
+
+AIC(glm2)
+
+glm2 <- glm(nplants ~ trat, family = "poisson", data = exp2)
+
+summary (glm2)
+
+AIC(glm2)
+
+
+glm2 <- glm(nplants ~ trat, family = poisson(link = "log"), data = exp2)
+
+summary (glm2)
+
+AIC(glm2)
+
+
+
+#para mdelos mistos, fazendo um modelo global para todos os 3 experimentos 
+
+glm2 <- glmer(nplants ~trat + (1 | exp), family = "gaussian", data = estande)
+summary(glm2)
+AIC(glm2)
+
+
+```
+
+```{r}
+remotes::install_github("emdelponte/r4pde")
+install.packages("r4pde")
+library(r4pde)
+install.packages("r4pde")
+library(r4de)
+#calcular o slope médio de cada regressão 
+
+## o modelo misto de antes era considerando o expeimro com oefeito aleatório. agora conseideraeremos ele como efeito fixo, como bloco 
+
+
+
+#g´rafico de varipavel contínua (produtividade) em função de uma cultivar discreta (inci^dencia)
+wn<-whitemolSoybean
+
+wn|>
+  ggplot(aes(inc, yld))+
+
+  
+  
+  
+
+  
+```
+
+```{r}
+library(broom)
+fit_all <- wn |> 
+  group_by(study) |>
+  do(tidy(lm(.$yld ~ .$inc), conf.int = TRUE))
+fit_all
+
+```

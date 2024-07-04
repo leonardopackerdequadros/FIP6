@@ -1,0 +1,282 @@
+---
+title: "Data Frame"
+format: html
+editor: visual
+author: "Leonardo Packer de Quadros"
+execute: 
+  error: false
+  warning: false
+---
+
+# Dados
+
+A partir desta seção o objetivo será fornecer uma visão geral rápida das principais ferramentas para a importação, organização, transformação e visualização de dados. Iniciaremos abordando a importação e organização de dados.
+
+
+## Estrutura de Dados
+
+A estrutura dos dados pode ser classificada em várias formas:
+
+1. Escalares e Vetoriais: São os tipos mais simples de estrutura de dados. Os vetores podem conter um único valor, sendo chamados de escalares, ou múltiplos valores. Podem ser compostos por números, caracteres, fatores ou valores lógicos. Todos os elementos dentro de um vetor devem ser da mesma classe e podem incluir valores NA.
+
+2. Matrizes e Arrays: Matrizes são vetores com atributos adicionais chamados dimensões. Arrays são matrizes multidimensionais, permitindo mais de duas dimensões.
+
+3. Listas: Estruturas de dados que podem armazenar elementos de diferentes classes, incluindo outros vetores, matrizes, arrays e até outras listas. Um data.frame é um tipo especial de lista.
+
+4. Quadros de Dados (Data Frames): A forma de estrutura de dados mais utilizada. Podem conter diferentes classes de dados, onde cada linha representa uma observação individual e cada coluna corresponde a uma variável. É importante que todas as colunas tenham o mesmo número de observações para manter a regularidade dos dados.
+
+
+## Data Frame
+
+Um data.frame é uma estrutura de dados que organiza-os em uma tabela bidimensional de linhas e colunas.
+
+
+## Importação do Data Frame
+
+O data frame pode ser importado de algum pacote, em fomato Excel, csv e txt, em Google Sheets, ou copiados, colados ou digitados direto na interface R.
+
+
+### Data Frame disponível em um pacote
+
+```{r}
+## Carregamento do pacote ao qual estão dispostos o data.frame 
+library(ec50estimator)
+
+## criação do objeto atribuindo nome ao meu data.frame 
+data.frame1 <- multi_isolate
+
+## apresentando o meu data.frame 
+multi_isolate
+```
+
+
+### Data Frame disponível em formato Excel dentro da pasta do projeto
+
+```{r}
+install.packages("readxl")
+library(readxl)
+
+## chamando o documento que será o meu data.frame
+data.frame_2 <- read_excel("dados-diversos.xlsx")
+
+## Quero a segunda planilha do documento 
+data.frame_2 <- read_excel("dados-diversos.xlsx", sheet="escala")
+data.frame_2 <- read_excel("dados-diversos.xlsx", "escala")
+data.frame_2 <-read_excel("dados-diversos.xlsx",2)
+
+data.frame_2
+```
+
+### Data Frame disponível em formato csv dentro da pasta do projeto
+
+```{r}
+install.packages("tidyverse")
+library(tidyverse)
+
+## chamando o documento que será o meu data.frame
+data.frame_3 <- read_csv("dados-diversos_1.csv")
+
+data.frame_3
+```
+
+### Data Frame disponível em Google Sheets
+
+```{r}
+install.packages("gsheet")
+library(gsheet)
+
+data.frame_4 <- gsheet2tbl("https://docs.google.com/spreadsheets/d/1aID5Dh6PlBVCKzU1j7k-WA6zuWQWE2NhtWEgdJtt5iA/edit?usp=sharing")
+
+data.frame
+```
+
+### Data Frame inserido manualmente e colado no Chunk
+
+```{r}
+install.packages("datapasta") ## Pacote útil para inserir os dados de forma manual
+library(datapasta)
+
+## função tribble facilita a criação de tibbles (uma modernização dos data frames)
+data.frame_5 <- tibble::tribble(
+            ~trat, ~rep, ~comp,
+            "Mg2",   1L,     9,
+            "Mg2",   2L,  12.5,
+            "Mg2",   3L,    10,
+            "Mg2",   4L,     8,
+            "Mg2",   5L,  13.2,
+            "Mg2",   6L,    11,
+            "Mg2",   7L,  10.8,
+            "Mg2",   8L,   9.5,
+            "Mg2",   9L,  10.8,
+            "Mg2",  10L,  10.4,
+        "control",   1L, 13.72,
+        "control",   2L, 15.91,
+        "control",   3L,  15.7,
+        "control",   4L,  14.2,
+        "control",   5L,  15.9,
+        "control",   6L, 16.54,
+        "control",   7L,    18,
+        "control",   8L,  14.4,
+        "control",   9L, 16.41,
+        "control",  10L,    16
+        )
+
+data.frame_5
+```
+
+### Data Frame com inserção manual dos dados de cada variável/coluna como um fator
+
+```{r}
+data.frame_6 <- c("comp", "9", "12.5", "10", "8", "13.2", "11", "10.8", "9.5", "10.8", "10.4", "13.72", "15.91", "15.7", "14.2", "15.9", "16.54", "18", "14.4", "16.41", "16")
+
+data.frame_6
+```
+
+```{r}
+data.frame_7 <- data.frame(
+  stringsAsFactors = FALSE,
+              trat = c("Mg2","Mg2","Mg2","Mg2",
+                       "Mg2","Mg2","Mg2","Mg2","Mg2","Mg2","control",
+                       "control","control","control","control","control","control",
+                       "control","control","control"),
+               rep = c(1L,2L,3L,4L,5L,6L,7L,8L,
+                       9L,10L,1L,2L,3L,4L,5L,6L,7L,8L,9L,10L),
+              comp = c(9,12.5,10,8,13.2,11,10.8,
+                       9.5,10.8,10.4,13.72,15.91,15.7,14.2,15.9,16.54,
+                       18,14.4,16.41,16)
+)
+
+data.frame_7
+```
+
+### Data Frame copiado da Internet
+
+```{r}
+data.frame_8 <- tibble::tribble(
+        ~Nº,             ~País,        ~Área,         ~Habitantes, ~`População.por.km²`,                            
+         1L,            "Rússia", "17.098.300 km²",   "144,2 mi",                "8,4",
+         2L,            "Canadá",  "9.984.700 km²",    "38,9 mi",                "3,9",
+         3L,             "China",  "9.562.900 km²", "1.425,7 mi",              "149,1",
+         4L,               "USA",  "9.525.100 km²",   "333,3 mi",               "35,0",
+         5L,            "Brasil",  "8.515.800 km²",   "215,3 mi",               "25,3",
+         6L,         "Austrália",  "7.741.200 km²",    "26,0 mi",                "3,4",
+         7L,             "Índia",  "3.287.300 km²", "1.425,8 mi",              "433,7",
+         8L,         "Argentina",  "2.780.400 km²",    "46,2 mi",               "16,6",
+         9L,       "Cazaquistão",  "2.724.900 km²",    "19,6 mi",                "7,2",
+        10L,           "Argélia",  "2.381.700 km²",    "44,9 mi",               "18,9",
+        11L, "Congo (dem. rep.)",  "2.344.900 km²",    "99,0 mi",               "42,2",
+        12L,     "Groenlândia *",  "2.166.100 km²",     "0,1 mi",                "0,0",
+        13L,    "Arábia Saudita",  "2.149.700 km²",    "36,4 mi",               "16,9",
+        14L,            "México",  "1.964.400 km²",   "127,5 mi",               "64,9",
+        15L,         "Indonésia",  "1.913.600 km²",   "275,5 mi",              "144,0",
+        16L,             "Sudão",  "1.879.400 km²",    "46,9 mi",               "24,9",
+        17L,             "Líbia",  "1.759.500 km²",     "6,8 mi",                "3,9",
+        18L,               "Irã",  "1.648.200 km²",    "88,6 mi",               "53,7",
+        19L,          "Mongólia",  "1.564.100 km²",     "3,4 mi",                "2,2",
+        20L,              "Peru",  "1.285.200 km²",    "34,0 mi",               "26,5",
+        21L,             "Chade",  "1.284.000 km²",    "17,7 mi",               "13,8",
+        22L,             "Níger",  "1.267.000 km²",    "26,2 mi",               "20,7",
+        23L,            "Angola",  "1.246.700 km²",    "35,6 mi",               "28,5",
+        24L,              "Mali",  "1.240.200 km²",    "22,6 mi",               "18,2",
+        25L,     "África do Sul",  "1.219.100 km²",    "59,9 mi",               "49,1",
+        26L,          "Colômbia",  "1.141.700 km²",    "51,9 mi",               "45,4",
+        27L,           "Etiópia",  "1.104.300 km²",   "123,4 mi",              "111,7",
+        28L,           "Bolívia",  "1.098.600 km²",    "12,2 mi",               "11,1",
+        29L,        "Mauritânia",  "1.030.700 km²",     "4,7 mi",                "4,6",
+        30L,             "Egito",  "1.001.500 km²",   "111,0 mi",              "110,8"
+        )
+
+data.frame_8
+
+```
+
+## Tipos de Dados
+
+Os dados disponíveis no data frame podem ser das classes:
+
+Numérico - com uma ou mais casas decimais;
+
+Inteiro - sem casas decimais;
+
+Lógico; Complexo;
+
+Caraceter - pode ser um fator por exemplo.
+
+### Descobrir a classse dos dados de alguma variável por teste lógico
+
+```{r}
+class(data.frame_8$Habitantes)
+```
+
+```{r}
+is.character(data.frame_8$Habitantes)
+```
+
+### Alteração da classe dos dados de uma variável
+
+```{r}
+data.frame_8$Habitantes <- as.numeric(data.frame_8$Habitantes)
+data.frame_8$Habitantes <- as.character(data.frame_8$Habitantes)
+data.frame_8$Habitantes <- as.factor(data.frame_8$Habitantes)
+```
+
+## Organização do Data Frame
+
+```{r}
+data.frame_9 <- read_csv("https://raw.githubusercontent.com/emdelponte/paper-coffee-rust-Ethiopia/master/data/survey_clean.csv")
+
+## Observação a classe dos dados da variável 
+glimpse(data.frame_9)
+
+## Abertura do data.frame em uma nova aba 
+view(data.frame_9)
+```
+
+### Sumarização dos parâmetros de estatística descritiva de uma variável resposta
+
+```{r}
+summary(data.frame_9$inc)
+```
+
+### Filtrando os dados da variável resposta por um fator
+
+```{r}
+## Filtrando os dados da variável respota inc pelo fator region
+data.frame_9|>
+  group_by(region)|>
+  summarize(inc_mean = mean(inc),
+            sd_mean = sd(inc),
+            sd_mean = sd(inc))
+
+data.frame_9
+```
+
+```{r}
+## Agrupando os dados da variável resposta sev pelo fator cultivar 
+data.frame_9|>
+  group_by(cultivar)|>
+  summarise(sev_med = median(sev2), sev_mean = mean(sev2), sev_sd = sd(sev2))
+
+data.frame_9
+```
+
+### Criando um subconjunto
+
+```{r}
+## Selecionando os fatores farm, region e cultivar, e a variável resposta sev2
+data.frame_9_2<-data.frame_9|>
+  select(farm, region, cultivar, sev2)
+
+data.frame_9_2
+```
+
+```{r}
+## Selecionando linhas pelo nível do fator region Oromia, e colunas pelos fatores farm, region e cultivar, e variável resposta sev2
+data.frame_9_oromia<-data.frame_9|>
+  select(farm, region, cultivar, sev2)|>
+  filter(region=="Oromia")
+
+data.frame_9_oromia
+```
+
+Na próxima seção abordaremos a visualização de dados, extremamente importante para análise exploratória e para apresentação dos dados . . .

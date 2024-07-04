@@ -1,0 +1,44 @@
+{
+  "about.qmd": {
+    "about.html": "7277669f"
+  },
+  "index.qmd": {
+    "index.html": "943f239e"
+  },
+  "regressao.qmd": {
+    "regressao.html": "b68698dd"
+  },
+  "dataframe.qmd": {
+    "dataframe.html": "66424e28"
+  },
+  "Sobremim.qmd": {
+    "Sobremim.html": "587da43c"
+  },
+  "Uma Visão Geral Sobre Análise de Dados.qmd": {
+    "Uma Visão Geral Sobre Análise de Dados.html": "07d50b08"
+  },
+  "Mapas.qmd": {
+    "Mapas.html": "9aa1952d"
+  },
+  "Análise de Correlação.qmd": {
+    "Análise de Correlação.html": "813a4ce1"
+  },
+  "Análise de Regressão.qmd": {
+    "Análise de Regressão.html": "baa883fc"
+  },
+  "Data Frame.qmd": {
+    "Data Frame.html": "09cb32c5"
+  },
+  "Estatística Descritiva.qmd": {
+    "Estatística Descritiva.html": "30cf1622"
+  },
+  "Iniciando uma Jornada R.qmd": {
+    "Iniciando uma Jornada R.html": "81128861"
+  },
+  "Testes de Hipótese para dois Grupos.qmd": {
+    "Testes de Hipótese para dois Grupos.html": "b398b56e"
+  },
+  "Teste de Hipótese para Múltiplos Grupos.qmd": {
+    "Teste de Hipótese para Múltiplos Grupos.html": "ec3d0da7"
+  }
+}
